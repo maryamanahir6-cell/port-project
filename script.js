@@ -127,12 +127,18 @@
     },
   ];
   function projectPhoto(project, className, loading) {
+    var photoUrl = new URL(project.photo);
+    photoUrl.searchParams.set("auto", "format");
+    photoUrl.searchParams.set("fit", "crop");
+    photoUrl.searchParams.set("w", "1200");
+    photoUrl.searchParams.set("h", "720");
+    photoUrl.searchParams.set("q", "85");
     return (
       '<img class="' +
       className +
       '" src="' +
-      project.photo +
-      '?auto=format&fit=crop&w=1200&h=720&q=85" alt="' +
+      photoUrl.href +
+      '" alt="' +
       project.alt +
       '" width="1200" height="720" loading="' +
       loading +
@@ -453,29 +459,34 @@
   /* ---------- Curseur, en-tête, marquee ---------- */
   var cursor = $("#cursor");
   if (cursor && !reduce && matchMedia("(hover:hover)").matches) {
-    var cx = innerWidth / 2,
-      cy = innerHeight / 2,
-      tx = cx,
-      ty = cy,
+    var mouseX = 0,
+      mouseY = 0,
+      mouseFrame = 0,
       n1 = $(".n1"),
       n2 = $(".n2");
     addEventListener("mousemove", function (e) {
-      tx = e.clientX;
-      ty = e.clientY;
-      var x = tx / innerWidth - 0.5,
-        y = ty / innerHeight - 0.5;
-      if (n1)
-        n1.style.transform = "translate(" + x * 30 + "px," + y * 30 + "px)";
-      if (n2)
-        n2.style.transform = "translate(" + x * -40 + "px," + y * -40 + "px)";
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (mouseFrame) return;
+      mouseFrame = requestAnimationFrame(function () {
+        mouseFrame = 0;
+        cursor.style.transform =
+          "translate3d(" +
+          mouseX +
+          "px," +
+          mouseY +
+          "px,0) translate(-50%, -50%)";
+        var x = mouseX / innerWidth - 0.5,
+          y = mouseY / innerHeight - 0.5;
+        cursor.classList.add("active");
+        if (n1)
+          n1.style.transform =
+            "translate(" + x * 30 + "px," + y * 30 + "px)";
+        if (n2)
+          n2.style.transform =
+            "translate(" + x * -40 + "px," + y * -40 + "px)";
+      });
     });
-    (function loop() {
-      cx += (tx - cx) * 0.18;
-      cy += (ty - cy) * 0.18;
-      cursor.style.left = cx + "px";
-      cursor.style.top = cy + "px";
-      requestAnimationFrame(loop);
-    })();
     document.addEventListener("mouseover", function (e) {
       cursor.classList.toggle(
         "hovering",
@@ -512,11 +523,6 @@
     reveals.forEach(function (el) {
       io.observe(el);
     });
-    setTimeout(function () {
-      reveals.forEach(function (el) {
-        el.classList.add("visible");
-      });
-    }, 4000); // garde-fou
   }
 
   /* ---------- Compteurs ---------- */
