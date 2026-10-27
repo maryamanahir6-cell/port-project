@@ -105,7 +105,6 @@ button:focus-visible {
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(10, 10, 10, 0.07);
-  transition: padding 0.4s;
 }
 #nav.shrunk {
   padding: 0.75rem 4vw;
@@ -270,6 +269,9 @@ button:focus-visible {
 .hero-photo-wrap {
   position: relative;
   justify-self: center;
+}
+.hero-photo-picture {
+  display: block;
 }
 .hero-photo {
   width: 320px;

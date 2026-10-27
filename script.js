@@ -376,8 +376,9 @@
     }
     el.scrollIntoView({ behavior: BEH, block: "start" });
     el.classList.remove("flash");
-    void el.offsetWidth;
-    el.classList.add("flash");
+    requestAnimationFrame(function () {
+      el.classList.add("flash");
+    });
     setTimeout(function () {
       el.classList.remove("flash");
     }, 2200);
@@ -558,19 +559,39 @@
   if ("IntersectionObserver" in window) {
     var so = new IntersectionObserver(
       function (es) {
+        var barWidth = bar.clientWidth;
+        var barScrollable = bar.scrollWidth > barWidth;
+        var barLinkMetrics = [];
+        if (barScrollable) {
+          links.forEach(function (a) {
+            if (a.parentNode === bar)
+              barLinkMetrics.push({
+                link: a,
+                left: a.offsetLeft,
+                width: a.offsetWidth,
+              });
+          });
+        }
         es.forEach(function (e) {
           if (!e.isIntersecting) return;
           var id = "#" + e.target.id;
+          var activeBottomLink = null;
           links.forEach(function (a) {
             if (a.getAttribute("href") === id) {
               a.setAttribute("aria-current", "true");
-              if (bar.scrollWidth > bar.clientWidth && a.parentNode === bar)
-                bar.scrollTo({
-                  left: a.offsetLeft - (bar.clientWidth - a.offsetWidth) / 2,
-                  behavior: BEH,
-                });
+              if (a.parentNode === bar) activeBottomLink = a;
             } else a.removeAttribute("aria-current");
           });
+          if (barScrollable && activeBottomLink) {
+            var metric = barLinkMetrics.filter(function (item) {
+              return item.link === activeBottomLink;
+            })[0];
+            if (metric)
+              bar.scrollTo({
+                left: metric.left - (barWidth - metric.width) / 2,
+                behavior: BEH,
+              });
+          }
         });
       },
       { rootMargin: "-45% 0px -50% 0px" },

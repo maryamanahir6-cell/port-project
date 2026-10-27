@@ -125,14 +125,17 @@
         </div>
         <div class="hero-photo-wrap">
           <div class="hero-ring" aria-hidden="true"></div>
-          <img
-            class="hero-photo"
-            src="lo.png"
-            width="320"
-            height="320"
-            alt="Portrait de Maryam Anahir"
-            fetchpriority="high"
-          />
+          <picture class="hero-photo-picture">
+            <source srcset="lo.webp" type="image/webp" />
+            <img
+              class="hero-photo"
+              src="lo.png"
+              width="320"
+              height="320"
+              alt="Portrait de Maryam Anahir"
+              fetchpriority="high"
+            />
+          </picture>
         </div>
       </div>
       <div class="hero-scroll" aria-hidden="true">Défiler</div>
