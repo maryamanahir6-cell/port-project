@@ -5,8 +5,8 @@
   --black: #0a0a0a;
   --white: #fff;
   --grey: #555;
-  --serif: Georgia, "Times New Roman", serif;
-  --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --sans: "DM Sans", system-ui, sans-serif;
   --navh: 84px;
 }
 * {
