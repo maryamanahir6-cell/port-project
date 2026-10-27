@@ -215,7 +215,8 @@
     });
   });
   var S = {
-    done: P.length,
+    projects: 9,
+    events: 11,
     tech: Object.keys(techSet).length,
     completion: P.length
       ? Math.round(
@@ -226,7 +227,6 @@
             100,
         )
       : 0,
-    asso: $$("#exp-para .tl-item").length,
   };
   $$(".stat-num").forEach(function (el) {
     el.dataset.count = S[el.dataset.k];
